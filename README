@@ -1,0 +1,51 @@
+1.编译环境
+	$mysql安装
+		a. sudo apt-get install mysql-server
+ 
+　　b. sudo apt-get install mysql-client
+ 
+　　c. sudo apt-get install libmysqlclient-dev
+	$libzdb安装
+		a. 解压libzdb-3.0.tar.gz
+		   tar -xzvf libzdb-3.0.tar.gz
+		b. 编译、安装
+		   ./configure
+		   make
+		   make install
+		c. 将/usr/local/lib下libzdb相关的库文件软链接到/usr/lib或者将/usr/local/lib加入到/etc/ld.so.conf
+		   1. ln -s /usr/local/lib/ /usr/lib/
+
+2.编译
+	make
+	make clean
+	
+3.注意事项
+  $启动失败检查/tmp/ins是否存在，手动删除后再启动
+  $检查数据库账号是否正确
+  
+4. 未实现的功能
+	$数据库账号通过启动参数传入
+	$工作进程shutdown检查和重启
+	$每个会话添加包流水号
+	$...
+	
+5.客户端编写
+	$客户端代码源文件需要保存为utf-8，Windows下需要保存为utf-8 without signature(不带BOM的utf-8)
+	
+6.mysql配置支持utf8
+  $打开/etc/mysql/my.conf
+  $在[client]、[mysqld]、[mysql]分别添加
+  [client]
+  default-character-set=utf8
+  [mysqld]
+  character-set-server=utf8  
+  collation-server=utf8_unicode_ci
+  init_connect='SET NAMES utf8;'
+  [mysql]
+  default-character-set=utf8
+  $重启mysql服务
+  sudo service mysql restart
+  $创建数据库、表
+  create database Gaozhi CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+  create table account(UID INT, Username VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci, Password VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci)ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+  create table device(UID INT, DID VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci, Byname VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci)ENGINE=InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
